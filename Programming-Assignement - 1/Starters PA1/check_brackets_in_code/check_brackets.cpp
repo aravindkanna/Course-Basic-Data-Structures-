@@ -2,6 +2,8 @@
 #include <stack>
 #include <string>
 
+using namespace std;
+
 struct Bracket {
     Bracket(char type, int position):
         type(type),
@@ -26,20 +28,65 @@ int main() {
     std::string text;
     getline(std::cin, text);
 
-    std::stack <Bracket> opening_brackets_stack;
-    for (int position = 0; position < text.length(); ++position) {
-        char next = text[position];
+    stack<char> opening_bracket;
+    stack<int> position;
 
-        if (next == '(' || next == '[' || next == '{') {
-            // Process opening bracket, write your code here
+    for(int i = 0;i < text.length();i++){
+        if(text[i] == '('){
+            opening_bracket.push(text[i]);
+            position.push(i + 1);
         }
-
-        if (next == ')' || next == ']' || next == '}') {
-            // Process closing bracket, write your code here
+        else if(text[i] == '{'){
+            opening_bracket.push(text[i]);
+            position.push(i + 1);
+        }
+        else if(text[i] == '['){
+            opening_bracket.push(text[i]);
+            position.push(i + 1);
+        }
+        else if(text[i] == ')'){
+            if(opening_bracket.empty() || opening_bracket.top() != '('){
+                cout << i + 1 << endl;
+                return 0;
+            }
+            else{
+                opening_bracket.pop();
+                position.pop();
+            }
+        }
+        else if(text[i] == '}'){
+            if(opening_bracket.empty() || opening_bracket.top() != '{'){
+                cout << i + 1 << endl;
+                return 0;
+            }
+            else{
+                opening_bracket.pop();
+                position.pop();
+            }
+        }
+        else if(text[i] == ']'){
+            if(opening_bracket.empty() || opening_bracket.top() != '['){
+                cout << i + 1 << endl;
+                return 0;
+            }
+            else{
+                opening_bracket.pop();
+                position.pop();
+            }
         }
     }
 
-    // Printing answer, write your code here
+    if(!opening_bracket.empty()){
+        int pos = 0;
+        while(!position.empty()){
+            pos = position.top();
+            position.pop();
+        }
+        cout << pos << endl;
+    }
+    else{
+        cout << "Success" << endl;
+    }
 
     return 0;
 }
